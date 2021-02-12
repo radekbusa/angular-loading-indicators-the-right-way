@@ -1,0 +1,39 @@
+<div class="container">
+	<div [appIsLoading]="loadingService.isLoading(this)">
+		<br>
+		<h1>LoadingService Example</h1>
+		<div class="alert alert-primary" role="alert">
+			This text is behind a loading overlay if any of the three sections below are loading.
+		</div>
+		<br>
+</div>
+		<div class="mb-4" [appIsLoading]="loadingService.isLoading(this, LoadingIndicator.OPERATOR)">
+			<div>
+				<h1>Operator Example</h1>
+				<p>This example shows how to use the <code>LoadingService#doLoading</code> Observable creation operator
+					to automate showing and hiding of the loading indicator automatically. 🪄</p>
+				<p>{{ subscriptionText }}</p>
+			</div>
+
+			<button class="btn btn-primary" (click)="refreshSubscription()">Refresh (operator)</button>
+		</div>
+		<div class="mb-4" [appIsLoading]="loadingService.isLoading(this, LoadingIndicator.ASYNC_PIPE)">
+			<div>
+				<h1>Async Pipe Example</h1>
+				<p><code>LoadingService#doLoading</code> operator also works with <code>async</code> pipes! 🎉</p>
+				<p>{{ asyncText$ | async }}</p>
+			</div>
+		</div>
+		<div class="mb-4" [appIsLoading]="loadingService.isLoading(this, LoadingIndicator.MANUAL)">
+			<div>
+				<h1>Manual Control Example</h1>
+				<p>This example shows how to use <code>LoadingService#startLoading</code> and
+					<code>LoadingService#endLoading</code> methods in a fashion similar to setting/unsetting a boolean
+					flag like <code>isLoading</code> in controllers, giving you a enough flexibility to tackle just
+					about any problem related to loading indicators. 🛠</p>
+				<p>{{ manualText }}</p>
+			</div>
+
+			<button class="btn btn-primary" (click)="refreshManual()">Refresh (manual)</button>
+		</div>
+	</div>
