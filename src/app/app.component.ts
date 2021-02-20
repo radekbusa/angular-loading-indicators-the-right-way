@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { of } from "rxjs";
+import { of, asyncScheduler } from "rxjs";
 import { LoadingService } from "./loading/loading.service";
 import { delay } from "rxjs/operators";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
@@ -63,7 +63,9 @@ export class AppComponent implements OnInit {
   protected manualExample(): void {
     this.loadingService.startLoading(this, LoadingIndicator.MANUAL);
 
-    of(`Peek-a-boo ${this.loadCounter++}`)
+    // In case you need to mock your observables using of(...),
+    // don't forget to make them async-scheduled in manual scenarios!
+    of(`Peek-a-boo ${this.loadCounter++}`, asyncScheduler)
       .pipe(
         delay(6000),
         untilDestroyed(this)
