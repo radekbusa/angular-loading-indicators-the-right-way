@@ -1,25 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {of} from 'rxjs';
-import {LoadingService} from './loading/loading.service';
-import {delay} from 'rxjs/operators';
-import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import { Component, OnInit } from "@angular/core";
+import { of } from "rxjs";
+import { LoadingService } from "./loading/loading.service";
+import { delay } from "rxjs/operators";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 
 // contains identifiers of all loading indicators in this component
 enum LoadingIndicator {
   OPERATOR,
   MANUAL,
-  ASYNC_PIPE,
+  ASYNC_PIPE
 }
 
 @UntilDestroy()
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  subscriptionText = '';
-  manualText = '';
+  subscriptionText = "";
+  manualText = "";
   LoadingIndicator = LoadingIndicator;
 
   loadCounter = 1;
@@ -29,11 +29,11 @@ export class AppComponent implements OnInit {
     // .delay(...) simulates network delay
     of(`Peek-a-boo ${this.loadCounter++}`).pipe(delay(4000)),
     this,
-    LoadingIndicator.ASYNC_PIPE,
+    LoadingIndicator.ASYNC_PIPE
   );
 
   constructor(
-    public loadingService: LoadingService, // accessed from the template
+    public loadingService: LoadingService // accessed from the template
   ) {}
 
   ngOnInit(): void {
@@ -50,24 +50,27 @@ export class AppComponent implements OnInit {
   }
 
   protected subscriptionExample(): void {
-    this.loadingService.doLoading(
-      of(`Peek-a-boo ${this.loadCounter++}`).pipe(delay(2000)),
-      this,
-      LoadingIndicator.OPERATOR,
-    ).pipe(
-      untilDestroyed(this),
-    ).subscribe(text => this.subscriptionText = text);
+    this.loadingService
+      .doLoading(
+        of(`Peek-a-boo ${this.loadCounter++}`).pipe(delay(2000)),
+        this,
+        LoadingIndicator.OPERATOR
+      )
+      .pipe(untilDestroyed(this))
+      .subscribe(text => (this.subscriptionText = text));
   }
 
   protected manualExample(): void {
     this.loadingService.startLoading(this, LoadingIndicator.MANUAL);
 
-    of(`Peek-a-boo ${this.loadCounter++}`).pipe(
-      delay(6000),
-      untilDestroyed(this),
-    ).subscribe(text => {
-      this.loadingService.endLoading(this, LoadingIndicator.MANUAL);
-      this.manualText = text;
-    });
+    of(`Peek-a-boo ${this.loadCounter++}`)
+      .pipe(
+        delay(6000),
+        untilDestroyed(this)
+      )
+      .subscribe(text => {
+        this.loadingService.endLoading(this, LoadingIndicator.MANUAL);
+        this.manualText = text;
+      });
   }
 }

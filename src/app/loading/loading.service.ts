@@ -1,6 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
-import {Observable} from 'rxjs';
-import {finalize} from 'rxjs/operators';
+import {asyncScheduler, Observable} from 'rxjs';
+import {finalize, observeOn} from 'rxjs/operators';
 
 type LoadingContext = object;
 type LoaderId = string|number; // expected enum values
@@ -43,6 +43,7 @@ export class LoadingService {
     this.startLoading(context, loaderId);
 
     return source$.pipe(
+      observeOn(asyncScheduler),
       finalize(() => this.endLoading(context, loaderId)),
     );
   }
